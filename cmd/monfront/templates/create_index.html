@@ -1,0 +1,84 @@
+{{ template "header" . }}
+<section id="content">
+  <h1>create entries</h1>
+  <details>
+    <summary>checks</summary>
+      <form action="/create" method="POST">
+      <p><label>name</label><input name="name" /></p>
+      <p><label>node</label>
+        <select name="node_id">
+          {{ range $node := .Content.nodes.Rows }}
+            <option value="{{ (index . 0).String }}">{{ (index . 1).String }}</option>
+          {{ end }}
+        </select>
+      </p>
+      <p><label>command</label><select name="command_id">
+          {{ range $node := .Content.commands.Rows }}
+            <option value="{{ (index . 0).String }}">{{ (index . 1).String }}</option>
+          {{ end }}
+      </select></p>
+      <p><label>checker</label><select name="checker_id">
+          {{ range $node := .Content.checkers.Rows }}
+            <option value="{{ (index . 0).String }}">{{ (index . 1).String }}</option>
+          {{ end }}
+      </select></p>
+      <p><label>interval</label><input type="integer" name="interval" value="300" /></p>
+      <fieldset>
+        <legend>options</legend>
+        <!-- TODO implement setting options -->
+      </fieldset>
+      <p><label>message</label><textarea name="message"></textarea></p>
+      <p><button type="submit" name="type" value="check">create</button></p>
+    </form>
+  </details>
+  <details>
+    <summary>nodes</summary>
+    <details>
+      <summary>create new node</summary>
+      <form action="/create" method="POST">
+        <p><label>name</label><input name="name" /></p>
+        <p><label>message</label><textarea name="message"></textarea></p>
+        <p><button type="submit" name="type" value="node">create</button></p>
+      </form>
+    </details>
+    {{ template "rows_to_table" .Content.nodes }}
+  </details>
+  <details>
+    <summary>commands</summary>
+    <details>
+      <summary>create new command</summary>
+      <form action="/create" method="POST">
+        <p><label>name</label><input name="name" /></p>
+        <p><label>command</label><textarea name="command"></textarea></p>
+        <p><label>message</label><textarea name="message"></textarea></p>
+        <p><button type="submit" name="type" value="command">create</button></p>
+      </form>
+    </details>
+    {{ template "rows_to_table" .Content.commands }}
+  </details>
+  <details>
+    <summary>checkers</summary>
+    <details>
+      <summary>create new checker instance</summary>
+      <form action="/create" method="POST">
+        <p><label>name</label><input name="name" /></p>
+        <p><label>description</label><textarea name="description"></textarea></p>
+        <p><button type="submit" name="type" value="checker">create</button></p>
+      </form>
+    </details>
+    {{ template "rows_to_table" .Content.checkers }}
+  </details>
+  <details>
+    <summary>notifier</summary>
+    <details>
+      <summary>create new notifier</summary>
+      <form action="/create" method="POST">
+        <p><label>name</label><input name="name" /></p>
+        <p><label>settings</label><textarea name="settings">{}</textarea></p>
+        <p><button type="submit" name="type" value="notifier">create</button></p>
+      </form>
+    </details>
+    {{ template "rows_to_table" .Content.notifier }}
+  </details>
+</section>
+{{ template "footer" . }}

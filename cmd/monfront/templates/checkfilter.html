@@ -1,0 +1,49 @@
+  <form action="/checks" method="get">
+		<aside id="edit">
+      <div class="option">
+        <select id="filter-state" name="filter-state" class="states">
+          <option value="">filter state</option>
+          {{ $FilterValsState := "" }}
+          {{ if .Filter.Vals.state }}{{$FilterValsState = .Filter.Vals.state }}{{ end }}
+          <option value="0" {{ if eq (itoa 0) $FilterValsState }}selected{{ end }}>&gt;= OK</option>
+          <option value="1" {{ if eq (itoa 1) $FilterValsState }}selected{{ end }}>&gt;= Warning</option>
+          <option value="2" {{ if eq (itoa 2) $FilterValsState }}selected{{ end }}>&gt;= Error</option>
+          <option value="3" {{ if eq (itoa 3) $FilterValsState }}selected{{ end }}>&gt;= Unknown</option>
+        </select>
+      </div>
+      <div class="option">
+        <select id="filter-ack" name="filter-ack">
+          <option value="">filter acknowledged</option>
+          <option value="false" {{ if eq "false" (index .Filter.Vals "ack") }}selected{{ end }}>unacknowledged</option>
+          <option value="true" {{ if eq "true" (index .Filter.Vals "ack") }}selected{{ end }}>acknowledged</option>
+        </select>
+      </div>
+      <div class="option">
+        <select id="filter-mapping" name="filter-mapping">
+          <option value="">filter mapping</option>
+          {{ $FilterValsMapping := "" }}
+          {{ if .Filter.Vals.mapping }}{{ $FilterValsMapping = .Filter.Vals.mapping }}{{ end }}
+          {{ range $mapId, $mapping := .Mappings -}}
+          <option value="{{ $mapId }}" {{ if eq (itoa $mapId) $FilterValsMapping }}selected{{ end }}>{{ (index $mapping 0).Name }}</option>
+          {{ end }}
+        </select>
+      </div>
+      <div class="option">
+        <select id="filter-command" name="filter-command">
+          <option value="">filter command</option>
+          {{ $FilterValsCommands := "" }}
+          {{ if .Filter.Vals.command }}{{ $FilterValsCommands = .Filter.Vals.command }}{{ end }}
+          {{ range $command, $comId := .Commands -}}
+          <option value="{{ $comId }}" {{ if eq (itoa $comId) $FilterValsCommands }}selected{{ end }}>{{ $command }}</option>
+          {{ end }}
+        </select>
+      </div>
+      <div class="option">
+        <input name="filter-search" placeholder="hostname" value="{{ .Filter.Vals.search }}" />
+      </div>
+			<div class="option">
+        <button name="filter" value="1">filter</button>
+        <button name="reset" value="1">reset</button>
+      </div>
+    </aside>
+  </form>

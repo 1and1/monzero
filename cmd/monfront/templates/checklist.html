@@ -1,0 +1,29 @@
+    {{ template "header" . }}
+    <section id="content">
+    {{ template "checkfilter" . }}
+    {{ template "checkformheader" . }}
+			<table>
+        <thead><tr><th><input type="checkbox" title="select all" /></th><th>host</th><th>service</th><th>status</th><th title="shows how long the check is already in that state">for</th><th>next check in</th><th>message</th></tr></thead>
+				<tbody>
+				{{ $current := "" }}
+				{{ $mapping := .Mappings }}
+				{{ range .Checks }}
+				<tr>
+					<td><input type="checkbox" name="checks" value="{{ .CheckID }}" /></td>
+					<td>{{ if ne $current .NodeName }}{{ $current = .NodeName }}<a href="/checks?node_id={{ .NodeId }}">{{ .NodeName }}</a>{{ end }}</td>
+          <td>{{ .CheckName }}</td>
+					<td class="state-{{ .State }}">
+            {{- if ne .Notify true }}<span class="icon mute"></span>{{ end -}}
+            {{- if .Notice.Valid }}<span class="icon notice" title="{{ .Notice.String }}"></span>{{ end -}}
+            <a href="/check?check_id={{ .CheckID }}">{{ .CommandName }}</a>
+          </td>
+          <td>{{ since .StateSince }}</td>
+					<td>{{ in .NextTime }}</td>
+					<td><code>{{ .Msg }}</code></td>
+				</tr>
+				{{ end }}
+				</tbody>
+			</table>
+    {{ template "checkformfooter" . }}
+    </section>
+		{{ template "footer" . }}

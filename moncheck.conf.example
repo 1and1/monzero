@@ -1,0 +1,13 @@
+{
+  "db": "user=moncheck dbname=monzero",
+  "checker_id": 1,
+  "timeout": "5s",
+  "wait": "5s",
+  "path": [
+    "/bin",
+    "/sbin",
+    "/usr/bin",
+    "/usr/sbin"
+  ],
+  "workers": 25
+}

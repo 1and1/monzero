@@ -1,0 +1,32 @@
+    {{ if .CanEdit }}
+    <form action="/action" method="post">
+		<aside id="edit">
+      <button class="default_button" name="action" value="comment"></button>
+      <div class="option input">
+        <input type="number" name="run_in" placeholder="run in" title="define the number of minutes after which the check should be run again" />
+        <button name="action" value="reschedule">run now</button>
+      </div>
+			<div class="option">
+        <button name="action" value="deack">deack</button>
+        <button name="action" value="ack">ack</button>
+      </div>
+      <div class="option">
+        <button name="action" value="enable">enable</button>
+        <button name="action" value="disable">disable</button>
+      </div>
+      <div class="option">
+        <button name="action" value="mute">mute</button>
+        <button name="action" value="unmute">unmute</button>
+			</div>
+			<div class="option input">
+        <input size="" name="comment" placeholder="enter comment ..." />
+			</div>
+      <div class="option">
+        <button name="action" value="comment">comment</button>
+        <button name="action" value="uncomment">uncomment</button>
+      </div>
+      <div class="option">
+        <button name="action" value="delete_check">delete</button>
+      </div>
+		</aside>
+    {{ end }}

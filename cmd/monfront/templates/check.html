@@ -1,0 +1,51 @@
+    {{ template "header" . }}
+		<section id="content">
+      {{ template "checkformheader" . }}
+			{{ $mapping := .Mappings }}
+			{{ with .CheckDetails }}
+				<input type="hidden" name="checks" value="{{ .Id }}" />
+				<article class="detail">
+          <h1>check for service {{ .Name }}</h1>
+					<div><span class="label">current state</span><span class="value state-{{ index .States 0 }}"></span></div>
+					<div><span class="label">current notice</span><span class="value">{{ if .Notice }}{{ .Notice.String }}{{ end }}</span></div>
+					<div><span class="label">Message</span><span class="value">{{ .Message }}</span></div>
+					<div><span class="label">enabled</span><span class="value">{{ .Enabled }}</span></div>
+					<div><span class="label">updated</span><span class="value">{{ .Updated.Format "2006.01.02 15:04:05" }}</span></div>
+					<div><span class="label">next check</span><span class="value">{{ .NextTime.Format "2006.01.02 15:04:05" }}</span></div>
+					<div><span class="label">last refresh</span><span class="value">{{ .LastRefresh.Format "2006.01.02 15:04:05" }}</span></div>
+					<div><span class="label">mapping</span><span class="value">{{ .MappingId }}</span></div>
+				</article>
+				<article class="detail">
+					<h1>node <a href="/checks?node_id={{ .NodeId }}">{{ .NodeName }}</a></h1>
+					<div><span class="label">Message</span><span class="value">{{ .NodeMessage }}</span></div>
+				</article>
+				<article class="detail">
+					<h1>command {{ .CommandName }}</h1>
+					<div><span class="label">Message</span><span class="value">{{ .CommandMessage }}</span></div>
+					<div><span class="label">command line</span><span class="value"><code>{{ join .CommandLine " " }}</code></span></div>
+				</article>
+        <article class="detail">
+          <h1>checker {{ .CheckerName }}</h1>
+          <div><span class="label">Description</span><span class="value">{{ .CheckerMsg }}</span></div>
+        </article>
+				<article>
+					<h1>notifications</h1>
+					<table>
+						<thead><tr><th>notifier</th><th>state</th><th>created</th><th>sent</th><th>output</th></thead>
+						<tbody>
+							{{ range .Notifications -}}
+								<tr>
+									<td>{{ .NotifierName }}</td>
+									<td class="state-{{ .MappingId }}-{{ .State }}">{{ (index $mapping .MappingId .State).Title }}</td>
+									<td>{{ .Inserted.Format "2006.01.02 15:04:05"  }}</td>
+									<td>{{ if .Sent.Valid }}{{ .Sent.Time.Format "2006.01.02 15:04:05"  }}{{ end }}</td>
+									<td>{{ .Output }}</td>
+								</tr>
+							{{ end -}}
+						</tbody>
+					</table>
+				</article>
+			{{ end }}
+      {{ template "checkformfooter" . }}
+		</section>
+		{{ template "footer" . }}

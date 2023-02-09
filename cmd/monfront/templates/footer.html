@@ -1,0 +1,76 @@
+    <script type="text/javascript">
+			function row_head_click_event(event) {
+				check = false;
+				current = event.target;
+				while (current != null) {
+					if (current.nodeName == 'TABLE') {
+						break;
+					}
+					if (current.nodeName == 'TR') {
+						check = !current.children[0].children[0].checked;
+						current.children[0].children[0].checked = check;
+					}
+					current = current.parentNode;
+				}
+				lines = current.children[1].children
+				for (i = 0; i < lines.length; i++) {
+					select_row(event, lines[i], lines[i].children[0].children[0], check);
+				}
+			}
+			function row_click_event(event) {
+				if (event.target.nodeName == 'INPUT') {
+					return;
+				}
+				current = event.target;
+				while (current = current.parentNode) {
+					if (current.nodeName == 'BODY') {
+						break;
+					}
+					if (current.nodeName != 'TR') {
+						continue;
+					}
+					e = current.children[0].children[0];
+					check = !e.checked;
+					select_row(event, current, e, check);
+					break;
+				}
+			}
+			function select_row(event, row, input, check) {
+				if (input != event.target) {
+					input.checked = check;
+				}
+				if (input.checked) {
+					row.classList.add("selected");
+				} else {
+					row.classList.remove("selected");
+				}
+				input.focus();
+			}
+
+			for (selector of ['thead > tr', 'thead input']) {
+				els = document.querySelectorAll(selector);
+				for (i = 0; i < els.length; i++) {
+					els[i].addEventListener('click', {handleEvent: row_head_click_event});
+				}
+			}
+			for (selector of ['tbody > tr', 'tbody input']) {
+				els = document.querySelectorAll(selector);
+				for (i = 0; i < els.length; i++) {
+					els[i].addEventListener('click', {handleEvent: row_click_event});
+				}
+			}
+      butt = document.querySelectorAll('button[type=button][name=create_check]');
+      for (i = 0; i < butt.length; i++) {
+        butt[i].addEventListener('click', {handleEvent: function(event){
+          cur = document.querySelector('#create_check').style.display; 
+          console.log("meh: " + cur);
+          if (cur == 'block') {
+            document.querySelector('#create_check').style.display = 'none'; 
+          } else {
+            document.querySelector('#create_check').style.display = 'block'; 
+          }
+        }});
+      }
+    </script>
+  </body>
+</html>

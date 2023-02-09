@@ -1,0 +1,21 @@
+    {{ template "header" . }}
+		{{ template "checkformheader" . }}
+			<content>
+				<table>
+					<thead><tr><th></th><th>group</th><th>host</th><th>worst state</th></tr></thead>
+					<tbody>
+					{{ $current := "" }}
+					{{ $mapping := .Mappings }}
+					{{ range .Groups }}
+					<tr>
+						<td><input type="checkbox" name="nodes" value="{{ .NodeId }}" /></td>
+						<td>{{ if ne $current .Name }}{{ $current = .Name }}<a href="{{ if $.Unhandled }}/unhandled{{ end }}/checks?group_id={{ .GroupId }}">{{ .Name }}</a>{{ end }}</td>
+						<td><a href="/checks?node_id={{ .NodeId }}">{{ .NodeName }}</a></td>
+						<td class="state-{{ .MappingId }}-{{ .State }}">{{ (index $mapping .MappingId .State).Title }}</td>
+					</tr>
+					{{ end }}
+					</tbody>
+				</table>
+			</content>
+		{{ template "checkformfooter" . }}
+		{{ template "footer" . }}

@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+	<head>
+		<title>{{ .Title }}</title>
+		<meta name="referrer" content="same-origin">
+		<link rel="shortcut icon" href="/static/favicon" />
+		<style type="text/css">
+      :root {
+        --main-bg-color: #3a4149;
+        --dark-bg-color: #2f353a;
+        --light-bg-color: #626971;
+        --main-fg-color: #eeeeee;
+
+        --bg-okay: hsla(125, 50%, 40%, 1);
+        --bg-warn: hsla(40, 100%, 50%, 1);
+        --bg-crit: hsla(0, 75%, 50%, 1);
+        --bg-unkn: gray;
+      }
+			* { font-size: 100%; }
+			body { background: var(--dark-bg-color); padding: 0; margin: 0; color: var(--main-fg-color); }
+      section#content { padding: 1em; background: var(--main-bg-color); border: 1px solid black; margin: 0.5em; }
+			#mainmenu, aside { background: var(--main-bg-color); border-bottom: 1px solid black; }
+			#mainmenu ul, aside {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 0;
+				padding: 0;
+				align-content: center; }
+      aside { padding: 0.5em; border: 1px solid black; border-bottom: none; }
+			#mainmenu li { list-style-type: none; }
+			#mainmenu a, #mainmenu a:visited, #mainmenu a:active, #mainmenu a:hover, #mainmenu span {
+        text-decoration: none;
+				color: #e4e7ea;
+				padding: 0.5em 0.75em;
+				display: block; }
+      aside .option { display: grid; grid-template-columns: auto auto; margin: 0em 0.25em; }
+      input[type="number"] { width: 4em; }
+      button, select { background: var(--dark-bg-color); color: var(--main-fg-color); border: 1px solid black; padding: 0.25em 0.5em; }
+      a { color: var(--main-fg-color); }
+      form article { border: 1px solid black; border-bottom: none; padding: 0.5em; }
+			table { border-collapse: collapse; border-spacing: 0; width: 100%; }
+			table tr:nth-child(odd) { background: rgba(0, 0, 0, 0.15); }
+			table tr:nth-child(even) { background: var(--main-bg-color); }
+			table tr.selected:nth-child(odd) { background: var(--light-bg-color); }
+			table tr.selected:nth-child(even) { background: rgba(255, 255, 255, 0.45); }
+			table tr:hover, table tr:hover a { background: #dfdfdf; color: black; }
+			table th { background: var(--main-bg-color); color: var(--main-fg-color); font-weigth: 700; }
+			table td, table th { text-align: center; border: 1px solid black; padding: 0.35em 0.15em; }
+			table code { font-size: 75%; }
+			table td.disabled { text-decoration: line-through; }
+			.icon {
+				display: inline-block;
+				height: 1em;
+				margin: 0;
+				width: 1em;
+				vertical-align: bottom;
+				margin-right: 0.5em;
+				background-size: contain;
+			}
+      .hidden { display: none; }
+      .default_button { margin: 0; padding: 0; border: 0; height: 0; width: 0; }
+			.mute { background-image: url(/static/icon-mute); }
+			.notice { background-image: url(/static/icon-notice); }
+			.detail > div { display: grid; grid-template-columns: 25% auto; }
+			.detail > div:hover { background: #dfdfdf; color: black; }
+			.error { padding: 0.5em; background: #ffc6c6; border: 1px solid red; }
+      select.states option[value="0"], .state-0 { background-color: var(--bg-okay); }
+      select.states option[value="1"], .state-1 { background-color: var(--bg-warn); }
+      select.states option[value="2"], .state-2 { background-color: var(--bg-crit); }
+      select.states option[value="3"], .state-3 { background-color: var(--bg-unkn); }
+      .state-0:after { content: 'okay' }
+      .state-1:after { content: 'warning' }
+      .state-2:after { content: 'critical' }
+      .state-3:after { content: 'unknown' }
+			/* state background colors */
+			{{ range $mapId, $mapping := .Mappings -}}
+			{{ range $target, $val := $mapping -}}
+			.state-{{ $mapId }}-{{ $target }} { background: {{ $val.Color }}; color: black; }
+			{{ end -}}
+			{{ end -}}
+		</style>
+		<script>
+			setTimeout(function() { if (document.activeElement.tagName == "BODY") { location.reload(true) } }, 30000)
+		</script>
+	</head>
+	<body>
+    <nav id="mainmenu">
+      <ul>
+        <li><span>{{ now.Format "2006.01.02" }}</span></li>
+        <li><span>{{ now.Format "15:04:05" }}</span></li>
+        <li><a href="/">home</a></li>
+        <li><a href="/checks?filter-state=1&filter-ack=false">checks</a></li>
+        <li><a href="/groups">groups</a></li>
+        <li><a href="/create">create</a></li>
+      </ul>
+    </nav>
+		{{ if .Error }}<div class="error">{{ .Error }}</div>{{ end }}

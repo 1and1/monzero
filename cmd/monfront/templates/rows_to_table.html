@@ -1,0 +1,19 @@
+    <table>
+      <tr>
+        {{ range $col := .Columns }}
+          <th>{{ $col }}</th>
+        {{ end }}
+        <th></th>
+      </tr>
+      {{ range $row := .Rows }}
+        <tr>
+          {{ range $col := $row }}
+          <td>{{ if $col.Valid }}{{ $col.String }}{{ end }}</td>
+          {{ end }}
+          <td>
+            <button name="update" value="{{ (index $row 0).String }}">update</button>
+            <button name="delete" value="{{ (index $row 0).String }}">delete</button>
+          </td>
+        </tr>
+      {{ end }}
+    </table>
